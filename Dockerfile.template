@@ -1,0 +1,6 @@
+FROM resin/raspberry-pi3-python:3.6-onbuild
+
+WORKDIR /usr/src/app
+ENV INITSYSTEM on
+
+CMD ["python", "run"]
