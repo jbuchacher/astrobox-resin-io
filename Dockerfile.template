@@ -5,5 +5,6 @@ ENV INITSYSTEM on
 
 RUN apt-get update && apt-get upgrade
 RUN apt-get install oracle-java8-jdk
+RUN apt-get install python-apt
 
 CMD ["python", "run"]
