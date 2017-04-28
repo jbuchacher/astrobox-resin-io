@@ -2,6 +2,7 @@ FROM resin/raspberry-pi3-python:2.7-onbuild
 
 WORKDIR /usr/src/app
 ENV INITSYSTEM on
+ENV DBUS_SYSTEM_BUS_ADDRESS "unix:path=/host/run/dbus/system_bus_socket"
 
 RUN apt-get update && apt-get upgrade
 RUN apt-get install oracle-java8-jdk
