@@ -3,4 +3,7 @@ FROM resin/raspberry-pi3-python:2.7-onbuild
 WORKDIR /usr/src/app
 ENV INITSYSTEM on
 
+RUN apt-get update && apt-get upgrade
+RUN apt-get install oracle-java8-jdk
+
 CMD ["python", "run"]
