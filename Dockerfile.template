@@ -1,6 +1,9 @@
 FROM resin/raspberry-pi3-python:2.7-onbuild
 
 WORKDIR /usr/src/app
+RUN mkdir /etc/astrobox
+ADD config.yml /etc/astrobox/config.yml
+
 ENV INITSYSTEM on
 ENV DBUS_SYSTEM_BUS_ADDRESS "unix:path=/host/run/dbus/system_bus_socket"
 
@@ -11,4 +14,4 @@ RUN apt-get install python-gi
 RUN apt-get install rubygems
 RUN gem install sass
 
-CMD ["python", "run"]
+CMD ["python", "run", "--config", "/etc/astrobox/config.yaml"]
