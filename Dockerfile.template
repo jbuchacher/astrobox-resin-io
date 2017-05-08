@@ -54,4 +54,4 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
 
 # -- End of resin-wifi-connect section -- #
 
-CMD ["python", "run", "--config", "/etc/astrobox/config.yml"]
+CMD ["bash", "start.sh"]
