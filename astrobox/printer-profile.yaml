@@ -1,0 +1,8 @@
+cancel_gcode:
+- G28 X0 Y0
+driver: marlin
+extruder_count: 1
+heated_bed: true
+invert_z: false
+max_bed_temp: 140
+max_nozzle_temp: 280

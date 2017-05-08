@@ -1,0 +1,9 @@
+server:
+  firstRun: false
+  port: 80
+software:
+  lastCheck: 1494269099.40977
+system:
+  actions:
+  - action: reboot
+    command: reboot
