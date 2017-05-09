@@ -1,10 +1,18 @@
-FROM resin/raspberry-pi3-python:2.7-onbuild
-
-WORKDIR /Astrobox
-ADD config /etc/astrobox
+FROM resin/raspberry-pi3-python:2.7
 
 ENV INITSYSTEM on
 ENV DBUS_SYSTEM_BUS_ADDRESS "unix:path=/host/run/dbus/system_bus_socket"
+ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
+ENV NODE_VERSION 6.9.1
+ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
+
+RUN mkdir /Astrobox
+WORKDIR /Astrobox
+
+COPY requirements.txt /Astrobox
+RUN pip install --no-cache-dir -r requirements.txt
+
+ADD config /etc/astrobox
 
 RUN apt-get update && apt-get upgrade
 RUN apt-get install oracle-java8-jdk
@@ -20,9 +28,6 @@ RUN apt-get install python-gst-1.0
 # FROM: https://github.com/resin-io-projects/resin-wifi-connect-example
 # -- Start of resin-wifi-connect section -- #
 
-# Set the device type environment variable using Dockerfile templates
-ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
-
 # Use apt-get to install dependencies
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     dnsmasq \
@@ -35,7 +40,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install node
-ENV NODE_VERSION 6.9.1
 RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-armv6l.tar.gz" && \
     echo "0b30184fe98bd22b859db7f4cbaa56ecc04f7f526313c8da42315d89fabe23b2  node-v$NODE_VERSION-linux-armv6l.tar.gz" | sha256sum -c - && \
     tar -xzf "node-v$NODE_VERSION-linux-armv6l.tar.gz" -C /usr/local --strip-components=1 && \
@@ -44,7 +48,6 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-a
     rm -rf /tmp/*
 
 # Install resin-wifi-connect
-ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
 RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIFI_CONNECT_VERSION.tar.gz" \
     | tar xzC /usr/src/app/ && \
     mv resin-wifi-connect-$RESIN_WIFI_CONNECT_VERSION resin-wifi-connect && \
