@@ -6,7 +6,6 @@ ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
 ENV NODE_VERSION 6.9.1
 ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
 
-RUN mkdir /Astrobox
 WORKDIR /Astrobox
 
 COPY requirements.txt /Astrobox
@@ -48,7 +47,7 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-a
     rm -rf /tmp/*
 
 # Install resin-wifi-connect
-RUN mkdir /resin-wifi-connect
+WORKDIR /resin-wifi-connect
 RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIFI_CONNECT_VERSION.tar.gz" \
     | tar xzC /resin-wifi-connect && \
     mv resin-wifi-connect-$RESIN_WIFI_CONNECT_VERSION resin-wifi-connect && \
