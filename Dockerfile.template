@@ -6,7 +6,6 @@ ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
 ENV NODE_VERSION 6.9.1
 ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
 
-RUN apt-get update && apt-get upgrade
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     dnsmasq \
     hostapd \
