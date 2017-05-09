@@ -11,6 +11,8 @@ WORKDIR /Astrobox
 COPY requirements.txt /Astrobox
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY . /Astrobox
+
 ADD config /etc/astrobox
 
 RUN apt-get update && apt-get upgrade
@@ -59,5 +61,7 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
     ./node_modules/.bin/coffee -c ./src
 
 # -- End of resin-wifi-connect section -- #
+
+WORKDIR /Astrobox
 
 CMD ["bash", "start.sh"]
