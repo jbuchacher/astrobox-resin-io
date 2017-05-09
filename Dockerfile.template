@@ -6,30 +6,7 @@ ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
 ENV NODE_VERSION 6.9.1
 ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
 
-WORKDIR /Astrobox
-
-COPY requirements.txt /Astrobox
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . /Astrobox
-
-ADD config /etc/astrobox
-
 RUN apt-get update && apt-get upgrade
-RUN apt-get install -y oracle-java8-jdk
-RUN apt-get install -y python-apt
-RUN apt-get install -y python-gi
-RUN apt-get install -y rubygems
-RUN gem install sass
-
-# Raspi cam support (GStreamer + python bindings)
-RUN apt-get install -y gstreamer1.0
-RUN apt-get install -y python-gst-1.0
-
-# FROM: https://github.com/resin-io-projects/resin-wifi-connect-example
-# -- Start of resin-wifi-connect section -- #
-
-# Use apt-get to install dependencies
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     dnsmasq \
     hostapd \
@@ -37,8 +14,16 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     iw \
     libdbus-1-dev \
     libexpat-dev \
-    rfkill && \
+    rfkill \
+    oracle-java8-jdk \
+    python-apt \
+    python-gi \
+    rubygems \
+    gstreamer1.0 \
+    python-gst-1.0 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN gem install sass
 
 # Install node
 RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-armv6l.tar.gz" && \
@@ -51,7 +36,7 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-a
 # Install resin-wifi-connect
 WORKDIR /resin-wifi-connect
 RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIFI_CONNECT_VERSION.tar.gz" \
-    | tar xzC . && \
+    | tar xzC --strip-components=1 /resin-wifi-connect && \
     JOBS=MAX npm install --unsafe-perm --production && \
     npm cache clean && \
     ./node_modules/.bin/bower --allow-root install && \
@@ -61,5 +46,12 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
 # -- End of resin-wifi-connect section -- #
 
 WORKDIR /Astrobox
+
+COPY requirements.txt /Astrobox
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /Astrobox
+
+ADD config /etc/astrobox
 
 CMD ["bash", "start.sh"]
