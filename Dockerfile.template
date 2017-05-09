@@ -51,9 +51,7 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-a
 # Install resin-wifi-connect
 WORKDIR /resin-wifi-connect
 RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIFI_CONNECT_VERSION.tar.gz" \
-    | tar xzC /resin-wifi-connect && \
-    mv resin-wifi-connect-$RESIN_WIFI_CONNECT_VERSION resin-wifi-connect && \
-    cd resin-wifi-connect && \
+    | tar xzC . && \
     JOBS=MAX npm install --unsafe-perm --production && \
     npm cache clean && \
     ./node_modules/.bin/bower --allow-root install && \
