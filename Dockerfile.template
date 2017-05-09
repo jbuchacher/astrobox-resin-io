@@ -47,12 +47,12 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
 
 # -- End of resin-wifi-connect section -- #
 
-WORKDIR /Astrobox
+WORKDIR /AstroBox
 
-COPY requirements.txt /Astrobox
+COPY requirements.txt /AstroBox
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /Astrobox
+COPY . /AstroBox
 
 ADD config /etc/astrobox
 
