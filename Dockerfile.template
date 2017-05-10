@@ -1,10 +1,11 @@
 FROM resin/raspberry-pi3-python:2.7
 
 ENV INITSYSTEM on
-ENV DBUS_SYSTEM_BUS_ADDRESS "unix:path=/host/run/dbus/system_bus_socket"
 ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
 ENV NODE_VERSION 6.9.1
 ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
+
+WORKDIR /AstroBox
 
 RUN apt-get update && \
     apt-get upgrade && \
@@ -35,10 +36,11 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-a
     rm -rf /tmp/*
 
 # Install resin-wifi-connect
-WORKDIR /resin-wifi-connect
+ENV RESIN_WIFI_CONNECT_VERSION 2.0.7
 RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIFI_CONNECT_VERSION.tar.gz" \
-    | tar xzC /resin-wifi-connect && \
-    cp -r resin-wifi-connect-$RESIN_WIFI_CONNECT_VERSION/* . && \
+    | tar xzC /AstroBox && \
+    mv resin-wifi-connect-$RESIN_WIFI_CONNECT_VERSION resin-wifi-connect && \
+    cd resin-wifi-connect && \
     JOBS=MAX npm install --unsafe-perm --production && \
     npm cache clean && \
     ./node_modules/.bin/bower --allow-root install && \
@@ -46,8 +48,6 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
     ./node_modules/.bin/coffee -c ./src
 
 # -- End of resin-wifi-connect section -- #
-
-WORKDIR /AstroBox
 
 COPY requirements.txt /AstroBox
 RUN pip install --no-cache-dir -r requirements.txt
