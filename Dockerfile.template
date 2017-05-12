@@ -63,8 +63,8 @@ RUN cd janus-gateway && \
     sh autogen.sh && \
     ./configure --prefix=/opt/janus && \
     make && \
-    make install && \
-    make configs
+    make install
+COPY janus/janus.cfg /opt/janus/etc/janus/janus.cfg
 
 # Install node
 WORKDIR /tmp
