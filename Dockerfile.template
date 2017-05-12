@@ -51,7 +51,6 @@ RUN wget https://github.com/cisco/libsrtp/archive/v2.0.0.tar.gz && \
 WORKDIR /tmp
 RUN git clone git://git.libwebsockets.org/libwebsockets
 RUN cd libwebsockets && \
-    git checkout v1.5-chrome47-firefox41 && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. && \
