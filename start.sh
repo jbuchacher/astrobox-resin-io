@@ -11,4 +11,4 @@ node /AstroBox/resin-wifi-connect/src/app.js --clear=false
 # Make Pi available
 modprobe v4l2_common
 
-python run --config /etc/astrobox/config.yaml
+python run --config /etc/astrobox/config.yaml --debug
