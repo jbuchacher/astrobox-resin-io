@@ -5,8 +5,6 @@ ENV DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
 ENV NODE_VERSION 6.9.1
 ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
 
-WORKDIR /AstroBox
-
 RUN apt-get update && \
     apt-get upgrade && \
     apt-get install -yq --no-install-recommends \
@@ -27,20 +25,40 @@ RUN apt-get update && \
     libjansson-dev \
     libnice-dev \
     libssl-dev \
-    libsrtp-dev \
     libsofia-sip-ua-dev \
     libglib2.0-dev \
     libopus-dev \
     libogg-dev \
     libcurl4-openssl-dev \
-    pkg-config gengetopt \
+    pkg-config \
+    gengetopt \
     libtool \
+    cmake \
     automake && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN gem install sass
 
-# Install Janus Gateway for WebRTC
+# Install libsrtp
+WORKDIR /tmp
+RUN wget https://github.com/cisco/libsrtp/archive/v2.0.0.tar.gz && \
+    tar xfv v2.0.0.tar.gz && \
+    cd libsrtp-2.0.0 && \
+    ./configure --prefix=/usr --enable-openssl && \
+    make shared_library && make install
+
+# Install WebSockets
+WORKDIR /tmp
+RUN git clone git://git.libwebsockets.org/libwebsockets
+RUN cd libwebsockets && \
+    git checkout v1.5-chrome47-firefox41 && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. && \
+    make && make install
+
+# Install Janus Gateway
+WORKDIR /tmp
 RUN git clone https://github.com/meetecho/janus-gateway.git
 RUN cd janus-gateway && \
     sh autogen.sh && \
@@ -50,6 +68,7 @@ RUN cd janus-gateway && \
     make configs
 
 # Install node
+WORKDIR /tmp
 RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-armv6l.tar.gz" && \
     echo "0b30184fe98bd22b859db7f4cbaa56ecc04f7f526313c8da42315d89fabe23b2  node-v$NODE_VERSION-linux-armv6l.tar.gz" | sha256sum -c - && \
     tar -xzf "node-v$NODE_VERSION-linux-armv6l.tar.gz" -C /usr/local --strip-components=1 && \
@@ -58,6 +77,7 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-a
     rm -rf /tmp/*
 
 # Install resin-wifi-connect
+WORKDIR /AstroBox
 ENV RESIN_WIFI_CONNECT_VERSION 2.0.7
 RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIFI_CONNECT_VERSION.tar.gz" \
     | tar xzC /AstroBox && \
@@ -68,8 +88,6 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
     ./node_modules/.bin/bower --allow-root install && \
     ./node_modules/.bin/bower --allow-root cache clean && \
     ./node_modules/.bin/coffee -c ./src
-
-# -- End of resin-wifi-connect section -- #
 
 COPY requirements.txt /AstroBox
 RUN pip install --no-cache-dir -r requirements.txt
