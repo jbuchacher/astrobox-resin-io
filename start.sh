@@ -8,7 +8,8 @@ node /AstroBox/resin-wifi-connect/src/app.js --clear=false
 # At this point the WiFi connection has been configured and the device has
 # internet - unless the configured WiFi connection is no longer available.
 
-# Make Pi available
+# Make Pi cam available
 modprobe v4l2_common
+modprobe bcm2835-v4l2
 
 python run --config /etc/astrobox/config.yaml --debug
