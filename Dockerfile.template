@@ -91,6 +91,8 @@ COPY requirements.txt /AstroBox
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /AstroBox
+
+RUN ln -s /opt/janus/bin/janus /usr/bin/janus
 COPY janus/* /opt/janus/etc/janus/
 
 ADD config /etc/astrobox
