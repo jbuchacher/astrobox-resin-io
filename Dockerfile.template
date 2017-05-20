@@ -64,7 +64,6 @@ RUN cd janus-gateway && \
     ./configure --prefix=/opt/janus && \
     make && \
     make install
-COPY janus/* /opt/janus/etc/janus/
 
 # Install node
 WORKDIR /tmp
@@ -92,6 +91,7 @@ COPY requirements.txt /AstroBox
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /AstroBox
+COPY janus/* /opt/janus/etc/janus/
 
 ADD config /etc/astrobox
 
