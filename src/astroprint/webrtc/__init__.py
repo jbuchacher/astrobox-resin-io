@@ -238,7 +238,7 @@ class WebRtc(object):
 
 					try:
 						response = session.post(
-							url= '0.0.0.0:8088',
+							url= 'http://0.0.0.0:8088',
 							data= {
 							 	"message":{
 									"request": 'info',
