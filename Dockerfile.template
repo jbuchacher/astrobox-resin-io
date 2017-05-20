@@ -64,7 +64,7 @@ RUN cd janus-gateway && \
     ./configure --prefix=/opt/janus && \
     make && \
     make install
-COPY janus/janus.cfg /opt/janus/etc/janus/janus.cfg
+COPY janus/* /opt/janus/etc/janus/
 
 # Install node
 WORKDIR /tmp
