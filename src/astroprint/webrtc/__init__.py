@@ -238,7 +238,7 @@ class WebRtc(object):
 
 					try:
 						response = session.post(
-							url= 'http://127.0.0.1:8088',
+							url= '0.0.0.0:8088',
 							data= {
 							 	"message":{
 									"request": 'info',
@@ -386,7 +386,7 @@ class ConnectionPeer(object):
 		sem = threading.Event()
 
 		self.streamingPlugin = StreamingPlugin()
-		self.session = Session('ws://127.0.0.1:8188', secret='d5faa25fe8e3438d826efb1cd3369a50')
+		self.session = Session('ws://0.0.0.0:8188', secret='d5faa25fe8e3438d826efb1cd3369a50')
 
 		@self.session.on_plugin_attached.connect
 		def receive_data(sender, **kw):
@@ -515,4 +515,3 @@ class ConnectionPeer(object):
 
 		except:
 			self._logger.error('Error sending event [%s] to peer %s' % (type, self.clientId), exc_info = True)
-
