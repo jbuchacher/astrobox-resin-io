@@ -12,4 +12,4 @@ node /AstroBox/resin-wifi-connect/src/app.js --clear=false
 modprobe v4l2_common
 modprobe bcm2835-v4l2
 
-python run --config /etc/astrobox/config.yaml --debug
+python run --config /etc/astrobox/config.yaml
