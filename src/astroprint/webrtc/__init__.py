@@ -238,7 +238,7 @@ class WebRtc(object):
 
 					try:
 						response = session.post(
-							url= 'http://0.0.0.0:8088',
+							url= 'http://0.0.0.0/janus',
 							data= {
 							 	"message":{
 									"request": 'info',
