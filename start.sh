@@ -13,4 +13,4 @@ modprobe v4l2_common
 modprobe bcm2835-v4l2
 
 cd /opt/janus/share/janus/demos && python -m SimpleHTTPServer 8000 &
-janus
+janus --stun-server=stun.l.google.com:19302
