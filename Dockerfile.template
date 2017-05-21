@@ -88,6 +88,12 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
     ./node_modules/.bin/bower --allow-root cache clean && \
     ./node_modules/.bin/coffee -c ./src
 
+# Install Astrobox
+COPY requirements.txt /AstroBox
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /AstroBox
+
 # Configure nginx
 COPY nginx/default /etc/nginx/sites-available/default
 
@@ -95,11 +101,7 @@ COPY nginx/default /etc/nginx/sites-available/default
 RUN ln -s /opt/janus/bin/janus /usr/bin/janus
 COPY janus/* /opt/janus/etc/janus/
 
-COPY requirements.txt /AstroBox
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . /AstroBox
-
+# Configure Astrobox
 ADD config /etc/astrobox
 
 CMD ["bash", "start.sh"]
