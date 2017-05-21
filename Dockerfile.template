@@ -8,33 +8,34 @@ ENV RESIN_WIFI_CONNECT_VERSION 2.0.6
 RUN apt-get update && \
     apt-get upgrade && \
     apt-get install -yq --no-install-recommends \
+    automake \
+    cmake \
     dnsmasq \
+    gengetopt \
+    gstreamer1.0 \
     hostapd \
     iproute2 \
     iw \
+    libcurl4-openssl-dev \
     libdbus-1-dev \
     libexpat-dev \
-    rfkill \
+    libglib2.0-dev \
+    libjansson-dev \
+    libmicrohttpd-dev \
+    libnice-dev \
+    libogg-dev \
+    libopus-dev \
+    libsofia-sip-ua-dev \
+    libssl-dev \
+    libtool \
+    nginx \
     oracle-java8-jdk \
+    pkg-config \
     python-apt \
     python-gi \
-    rubygems \
-    gstreamer1.0 \
     python-gst-1.0 \
-    libmicrohttpd-dev \
-    libjansson-dev \
-    libnice-dev \
-    libssl-dev \
-    libsofia-sip-ua-dev \
-    libglib2.0-dev \
-    libopus-dev \
-    libogg-dev \
-    libcurl4-openssl-dev \
-    pkg-config \
-    gengetopt \
-    libtool \
-    cmake \
-    automake && \
+    rfkill \
+    rubygems && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN gem install sass
@@ -87,13 +88,17 @@ RUN curl -SL "https://github.com/resin-io/resin-wifi-connect/archive/v$RESIN_WIF
     ./node_modules/.bin/bower --allow-root cache clean && \
     ./node_modules/.bin/coffee -c ./src
 
+# Configure nginx
+COPY nginx/default /etc/nginx/sites-available/default
+
+# Configure janus-gateway
+RUN ln -s /opt/janus/bin/janus /usr/bin/janus
+COPY janus/* /opt/janus/etc/janus/
+
 COPY requirements.txt /AstroBox
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /AstroBox
-
-RUN ln -s /opt/janus/bin/janus /usr/bin/janus
-COPY janus/* /opt/janus/etc/janus/
 
 ADD config /etc/astrobox
 
