@@ -12,5 +12,5 @@ node /AstroBox/resin-wifi-connect/src/app.js --clear=false
 modprobe v4l2_common
 modprobe bcm2835-v4l2
 
-python run --config /etc/astrobox/config.yaml --debug &&
-cd /opt/janus/share/janus/demos && python -m SimpleHTTPServer 8000
+cd /opt/janus/share/janus/demos && python -m SimpleHTTPServer 8000 &&
+python /AstroBox/run --config /etc/astrobox/config.yaml
