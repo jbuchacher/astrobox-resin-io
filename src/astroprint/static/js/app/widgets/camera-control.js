@@ -361,7 +361,7 @@ var CameraControlViewWebRTC = CameraControlView.extend({
         this.initJanus = this.originalFunctions.initJanus;
       }
 
-      this.serverUrl = "http://" + window.location.hostname + ":8088/janus";
+      this.serverUrl = "http://" + window.location.hostname + "/janus";
 
       this.initJanus();
 
